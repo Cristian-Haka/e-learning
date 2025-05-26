@@ -4,7 +4,7 @@ import { firebase, helpers } from 'redux-react-firebase';
 import omit from 'lodash.omit';
 import classNames from 'classnames';
 import SimpleMDE from 'react-simplemde-editor';
-import Select2 from 'react-select2-wrapper';
+import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import { history } from '../../store';
@@ -26,7 +26,56 @@ import Activity from '../../../../static/svg/activity.svg';
 import Post from '../../../../static/svg/post.svg';
 import File from '../../../../static/svg/file.svg';
 import LinkIcon from '../../../../static/svg/link.svg';
+
 import Forward from '../../../../static/svg/forward.svg';
+
+// Simple wrapper around `react-select` to mimic the old Select2 API used in this
+// project. It converts the provided `data` prop into the `options` format
+// expected by `react-select` and exposes an event-like object on change so that
+// existing handlers continue to work.
+function Select2({ data, options = {}, multiple, onChange, ...rest }) {
+  let selectOptions = options.options || [];
+
+  if (!selectOptions.length && data) {
+    if (Array.isArray(data)) {
+      selectOptions = data.map((item) => ({
+        value: item.id || item.value || item,
+        label: item.text || item.label || item.title || item.name || String(item),
+      }));
+    } else {
+      selectOptions = Object.keys(data).map((key) => {
+        const val = data[key];
+        return {
+          value: key,
+          label: val && (val.title || val.name || val.text) ?
+            (val.title || val.name || val.text) : String(val),
+        };
+      });
+    }
+  }
+
+  const handleChange = (value) => {
+    if (onChange) {
+      const val = multiple
+        ? (value || []).map((v) => v.value)
+        : (value ? value.value : '');
+      const index = Array.isArray(selectOptions)
+        ? selectOptions.findIndex((opt) => opt.value === val)
+        : -1;
+      const target = { value: val, selectedIndex: index };
+      onChange({ target, currentTarget: target });
+    }
+  };
+
+  return (
+    <Select
+      options={selectOptions}
+      isMulti={multiple}
+      onChange={handleChange}
+      {...rest}
+    />
+  );
+}
 
 const { isLoaded, isEmpty, dataToJS } = helpers;
 

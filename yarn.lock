@@ -7253,14 +7253,15 @@ react-router@6.30.1:
   dependencies:
     "@remix-run/router" "1.23.0"
 
-react-select2-wrapper@^1.0.4-beta2:
-  version "1.0.4-beta5"
-  resolved "https://registry.npmjs.org/react-select2-wrapper/-/react-select2-wrapper-1.0.4-beta5.tgz"
-  integrity sha512-S3CermkgmmGRBaV8vVOH/V4T7XhhoP4lUV0pQ9sOGhZC+fdXBmOhalpRD9DyifYX7Oh3XiOTfg552GVx5DfU7Q==
+react-select@^5.7.0:
+  version "5.7.0"
+  resolved "https://registry.npmjs.org/react-select/-/react-select-5.7.0.tgz"
+  integrity sha512-""
   dependencies:
-    prop-types "^15.5.8"
-    select2 "^4.0.0"
-    shallow-equal-fuzzy "^0.0.2"
+    "@babel/runtime" "^7.20.0"
+    memoize-one "^6.0.0"
+    prop-types "^15.7.2"
+    react-input-autosize "^3.0.0"
 
 react-side-effect@^2.1.0:
   version "2.1.2"
