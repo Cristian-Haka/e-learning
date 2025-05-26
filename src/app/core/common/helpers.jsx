@@ -9,7 +9,9 @@ import Course from '../../../../static/svg/course.svg';
 import Users from '../../../../static/svg/users.svg';
 
 // String capitalization
-String.prototype.capitalize = () => (this ? this.charAt(0).toUpperCase() + this.slice(1) : null);
+String.prototype.capitalize = function capitalize() {
+  return this ? this.charAt(0).toUpperCase() + this.slice(1) : null;
+};
 
 // Common app methods
 module.exports = {
