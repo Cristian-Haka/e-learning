@@ -112,3 +112,7 @@ The repository owner acknowledges that, except as explicitly described in this A
 ## Credits
 
 Icons from Flaticon.com (Freepik and Madebyoliver), triangles background by rvika from Fotolia and photos from Google Creative Commons search results
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
