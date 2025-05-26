@@ -67,6 +67,11 @@ const defaultProps = {
       icon: Post,
       link: '/blog'
     }, {
+      id: 50,
+      title: 'Concientización',
+      icon: Info,
+      link: '/awareness'
+    }, {
       id: 6,
       title: 'About',
       icon: Team,

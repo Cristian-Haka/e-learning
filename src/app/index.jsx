@@ -21,6 +21,12 @@ import Module from './themes/nekomy/pages/module/module';
 import Activity from './themes/nekomy/pages/activity/activity';
 import NotFound from './themes/nekomy/pages/notFound/notFound';
 import Admin from './core/admin/admin';
+import AwarenessMain from './themes/nekomy/pages/awareness/mainMenu';
+import TriviaMenu from './themes/nekomy/pages/awareness/triviaMenu';
+import AprendeMenu from './themes/nekomy/pages/awareness/aprendeMenu';
+import BuscaMenu from './themes/nekomy/pages/awareness/buscaMenu';
+import ReportaUrl from './themes/nekomy/pages/awareness/reportaUrl';
+import Configuracion from './themes/nekomy/pages/awareness/configuracion';
 
 // Google Analytics initializacion
 ReactGA.initialize('UA-00000000-1', {
@@ -93,6 +99,12 @@ ReactDOM.render(
         <Route path="/activities/:slug" component={Activity} />
         <Route path="/blog" component={Listing} />
         <Route path="/blog/:slug" component={Post} />
+        <Route path="/awareness" component={AwarenessMain} />
+        <Route path="/awareness/trivia" component={TriviaMenu} />
+        <Route path="/awareness/aprende" component={AprendeMenu} />
+        <Route path="/awareness/busca" component={BuscaMenu} />
+        <Route path="/awareness/reporta" component={ReportaUrl} />
+        <Route path="/awareness/config" component={Configuracion} />
         <Route path="/about" component={Page} />
         <Route path="/about/jobs" component={Page} />
         <Route path="/about/contact" component={Page} />
