@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import Icon from '../icon/icon';
 import EditIcon from '../../../../../../static/svg/edit.svg';
 import NewIcon from '../../../../../../static/svg/new.svg';

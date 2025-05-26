@@ -3,7 +3,8 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { firebase, helpers } from 'redux-react-firebase';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
+import withRouter from '../../../../withRouter';
 import { setLoading } from '../../../../core/actions/actions';
 import * as CONSTANTS from '../../../../core/constants/constants';
 import ModalBox from '../../../../core/common/modalbox/modalbox';
@@ -362,4 +363,4 @@ const mapStateToProps = ({
   }
 }) => ({ isDesktop, userData });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Course);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Course));

@@ -3,6 +3,7 @@ import { firebase, helpers } from 'redux-react-firebase';
 import axios from 'axios';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import withRouter from '../../../../withRouter';
 import { rtm, channels, chat } from 'slack';
 import { load as emojiLoader, parse as emojiParser } from 'gh-emoji';
 import moment from 'moment';
@@ -521,4 +522,4 @@ const mapStateToProps = ({
   }
 }) => ({ isDesktop, user, userData });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Chat);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Chat));

@@ -1,68 +1,51 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
-import { history } from '../../../../store';
+import { Link, useLocation } from 'react-router-dom';
 import { slugify } from '../../../../core/common/helpers';
 import { setBreadcrumbs } from '../../../../core/actions/actions';
 
-class Breadcrumbs extends Component {
+function Breadcrumbs({ breadcrumbs, setBreadcrumbs }) {
+  const location = useLocation();
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      initialised: false
-    };
-  }
-
-  componentDidMount() {
-    this.unlisten = history.listen((location) => {
-      let newTrail = [];
-      if (location.pathname !== '/') {
-        newTrail = location.pathname.substring(1, location.pathname.lenght).split('/');
-        for (let i = 0; i < newTrail.length; i += 1) {
-          newTrail[i] = newTrail[i].charAt(0).toUpperCase() + newTrail[i].slice(1);
-          newTrail[i] = newTrail[i].replace(/-/g, ' ');
-        }
+  React.useEffect(() => {
+    let newTrail = [];
+    if (location.pathname !== '/') {
+      newTrail = location.pathname.substring(1).split('/');
+      for (let i = 0; i < newTrail.length; i += 1) {
+        newTrail[i] = newTrail[i].charAt(0).toUpperCase() + newTrail[i].slice(1);
+        newTrail[i] = newTrail[i].replace(/-/g, ' ');
       }
+    }
+    newTrail.reverse();
+    setBreadcrumbs(newTrail);
+  }, [location]);
 
-      newTrail.reverse();
-      this.props.setBreadcrumbs(newTrail);
+  let links = null;
+
+  if (breadcrumbs) {
+    links = breadcrumbs.map((item, i) => {
+      let url = '';
+      for (let j = 0; j < i + 1; j += 1) {
+        url += `/${slugify(breadcrumbs[j])}`;
+      }
+      return (
+        <li className="item" key={item}>
+          <Link to={url}>{item}</Link>
+        </li>
+      );
     });
   }
 
-  componentWillUnmount() {
-    this.unlisten();
-  }
-
-  render() {
-    let links = null;
-
-    if (this.props.breadcrumbs) {
-      links = this.props.breadcrumbs.map((item, i) => {
-        let url = '';
-
-        for (let j = 0; j < i + 1; j += 1) {
-          url += `/${slugify(this.props.breadcrumbs[j])}`;
-        }
-
-        return (<li className="item" key={item}>
-          <Link to={url}>{item}</Link>
-        </li>);
-      });
-    }
-
-    return (
-      <div className="breadcrumbs">
-        <ul className="breadcrumbs-items">
-          <li className="item">
-            <Link to="/">Home</Link>
-          </li>
-          {links}
-        </ul>
-      </div>
-    );
-  }
+  return (
+    <div className="breadcrumbs">
+      <ul className="breadcrumbs-items">
+        <li className="item">
+          <Link to="/">Home</Link>
+        </li>
+        {links}
+      </ul>
+    </div>
+  );
 }
 
 const mapDispatchToProps = {

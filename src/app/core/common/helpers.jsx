@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { converter } from '../constants/constants';
 import Icon from './lib/icon/icon';
 import Calendar from '../../../../static/svg/calendar2.svg';

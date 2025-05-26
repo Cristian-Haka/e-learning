@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { firebase, helpers } from 'redux-react-firebase';
 import { renderCards } from '../../../../core/common/helpers';
+import withRouter from '../../../../withRouter';
 import { setLoading } from '../../../../core/actions/actions';
 
 const { isLoaded, isEmpty, dataToJS } = helpers;
@@ -69,4 +70,4 @@ const mapStateToProps = ({
   }
 }) => ({ isDesktop });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Listing);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Listing));

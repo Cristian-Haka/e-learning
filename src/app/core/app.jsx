@@ -1,4 +1,6 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Outlet } from 'react-router-dom';
 import { connect } from 'react-redux';
 import firebase from 'firebase';
 import debounce from 'lodash.debounce';
@@ -100,7 +102,7 @@ class App extends Component {
               : ''}
             />
           </div>
-          {React.cloneElement(this.props.children, this.props)}
+          <Outlet />
           <Footer />
         </div>
       </div>

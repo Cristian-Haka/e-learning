@@ -1,6 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
+import withRouter from '../../../../withRouter';
 import { firebase, helpers } from 'redux-react-firebase';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 import { ADMIN_LEVEL } from '../../../../core/constants/constants';
@@ -241,4 +243,4 @@ const mapStateToProps = ({
   }
 }) => ({ user });
 
-export default connect(mapStateToProps)(Navigation);
+export default withRouter(connect(mapStateToProps)(Navigation));

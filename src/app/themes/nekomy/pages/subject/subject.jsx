@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { firebase, helpers } from 'redux-react-firebase';
 import classNames from 'classnames';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
+import withRouter from '../../../../withRouter';
 import { setLoading } from '../../../../core/actions/actions';
 import * as CONSTANTS from '../../../../core/constants/constants';
 import Edit from '../../../../core/common/lib/edit/edit';
@@ -231,4 +232,4 @@ const mapStateToProps = ({
   }
 }) => ({ isDesktop, userData });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Subject);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Subject));
