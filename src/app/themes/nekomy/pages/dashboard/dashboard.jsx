@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { firebase, helpers } from 'redux-react-firebase';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { setLoading } from '../../../../core/actions/actions';
 import Icon from '../../../../core/common/lib/icon/icon';

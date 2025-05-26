@@ -1,11 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute } from 'react-router';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import ReactGA from 'react-ga';
 import firebase from 'firebase';
 import { ADMIN_LEVEL } from './core/constants/constants';
-import store, { history } from './store';
+import store from './store';
 import './bundle.scss';
 import App from './core/app';
 import Home from './themes/nekomy/pages/home/home';
@@ -28,7 +28,6 @@ import BuscaMenu from './themes/nekomy/pages/awareness/buscaMenu';
 import ReportaUrl from './themes/nekomy/pages/awareness/reportaUrl';
 import Configuracion from './themes/nekomy/pages/awareness/configuracion';
 
-// Google Analytics initializacion
 ReactGA.initialize('UA-00000000-1', {
   debug: false,
   titleCase: false,
@@ -42,77 +41,73 @@ function logPageView() {
   }
 }
 
-function requireAuth(nextState, replace, callback) {
-  firebase.auth().onAuthStateChanged((user) => {
-    if (!user || !user.emailVerified) {
-      history.push('/');
-    } else {
-      let requiresLevel = 0;
-      nextState.routes.map((route) => {
-        if (route.level) {
-          requiresLevel = route.level;
-        }
-        return false;
-      });
-      if (requiresLevel > 0) {
+function RequireAuth({ children, level = 0 }) {
+  const navigate = useNavigate();
+  const [allowed, setAllowed] = React.useState(false);
+
+  React.useEffect(() => {
+    const unsub = firebase.auth().onAuthStateChanged((user) => {
+      if (!user || !user.emailVerified) {
+        navigate('/');
+      } else if (level > 0) {
         firebase.database().ref(`/users/${user.uid}`).once('value').then((snapshot) => {
-          if (!snapshot.val() || !snapshot.val().info.level || (snapshot.val().info.level < requiresLevel)) {
-            history.push('/');
+          if (!snapshot.val() || !snapshot.val().info.level || (snapshot.val().info.level < level)) {
+            navigate('/');
           } else {
-            callback();
+            setAllowed(true);
           }
         });
       } else {
-        callback();
+        setAllowed(true);
       }
-    }
-  });
+    });
+    return () => unsub();
+  }, [level, navigate]);
+
+  return allowed ? children : null;
 }
 
-// Router initialization
-ReactDOM.render(
+const root = createRoot(document.getElementById('react-root'));
+root.render(
   <Provider store={store}>
-    <Router
-      onUpdate={() => {
-        window.scrollTo(0, 0);
-        logPageView();
-      }} history={history}
-    >
-      <Route path="/" component={App}>
-        <IndexRoute component={Home} />
-        <Route path="/dashboard" component={Dashboard} onEnter={requireAuth} />
-        <Route path="/account" component={AccountSettings} onEnter={requireAuth} />
-        <Route path="/account/notifications" component={AccountNotifications} onEnter={requireAuth} />
-        <Route path="/courses" component={Listing} />
-        <Route path="/courses/:slug" component={Course} />
-        <Route path="/courses/:slug/register" component={Course} />
-        <Route path="/courses/:slug/subjects" component={Course} />
-        <Route path="/courses/:slug/fees" component={Course} />
-        <Route path="/courses/:slug/requirements" component={Course} />
-        <Route path="/subjects" component={Listing} />
-        <Route path="/subjects/:slug" component={Subject} />
-        <Route path="/subjects/:slug/modules" component={Subject} />
-        <Route path="/subjects/:slug/activities" component={Subject} />
-        <Route path="/modules" component={Listing} />
-        <Route path="/modules/:slug" component={Module} />
-        <Route path="/activities" component={Listing} />
-        <Route path="/activities/:slug" component={Activity} />
-        <Route path="/blog" component={Listing} />
-        <Route path="/blog/:slug" component={Post} />
-        <Route path="/awareness" component={AwarenessMain} />
-        <Route path="/awareness/trivia" component={TriviaMenu} />
-        <Route path="/awareness/aprende" component={AprendeMenu} />
-        <Route path="/awareness/busca" component={BuscaMenu} />
-        <Route path="/awareness/reporta" component={ReportaUrl} />
-        <Route path="/awareness/config" component={Configuracion} />
-        <Route path="/about" component={Page} />
-        <Route path="/about/jobs" component={Page} />
-        <Route path="/about/contact" component={Page} />
-        <Route path="/admin" component={Admin} level={ADMIN_LEVEL} onEnter={requireAuth} />
-        <Route path="/admin/:type/:action" component={Admin} level={ADMIN_LEVEL} onEnter={requireAuth} />
-        <Route path="/admin/:type/:action/:slug" component={Admin} level={ADMIN_LEVEL} onEnter={requireAuth} />
-        <Route path="*" component={NotFound} />
-      </Route>
-    </Router>
-  </Provider>, document.getElementById('react-root')
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />}> 
+          <Route index element={<Home />} />
+          <Route path="dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
+          <Route path="account" element={<RequireAuth><AccountSettings /></RequireAuth>} />
+          <Route path="account/notifications" element={<RequireAuth><AccountNotifications /></RequireAuth>} />
+          <Route path="courses" element={<Listing />} />
+          <Route path="courses/:slug" element={<Course />} />
+          <Route path="courses/:slug/register" element={<Course />} />
+          <Route path="courses/:slug/subjects" element={<Course />} />
+          <Route path="courses/:slug/fees" element={<Course />} />
+          <Route path="courses/:slug/requirements" element={<Course />} />
+          <Route path="subjects" element={<Listing />} />
+          <Route path="subjects/:slug" element={<Subject />} />
+          <Route path="subjects/:slug/modules" element={<Subject />} />
+          <Route path="subjects/:slug/activities" element={<Subject />} />
+          <Route path="modules" element={<Listing />} />
+          <Route path="modules/:slug" element={<Module />} />
+          <Route path="activities" element={<Listing />} />
+          <Route path="activities/:slug" element={<Activity />} />
+          <Route path="blog" element={<Listing />} />
+          <Route path="blog/:slug" element={<Post />} />
+          <Route path="awareness" element={<AwarenessMain />} />
+          <Route path="awareness/trivia" element={<TriviaMenu />} />
+          <Route path="awareness/aprende" element={<AprendeMenu />} />
+          <Route path="awareness/busca" element={<BuscaMenu />} />
+          <Route path="awareness/reporta" element={<ReportaUrl />} />
+          <Route path="awareness/config" element={<Configuracion />} />
+          <Route path="about" element={<Page />} />
+          <Route path="about/jobs" element={<Page />} />
+          <Route path="about/contact" element={<Page />} />
+          <Route path="admin" element={<RequireAuth level={ADMIN_LEVEL}><Admin /></RequireAuth>} />
+          <Route path="admin/:type/:action" element={<RequireAuth level={ADMIN_LEVEL}><Admin /></RequireAuth>} />
+          <Route path="admin/:type/:action/:slug" element={<RequireAuth level={ADMIN_LEVEL}><Admin /></RequireAuth>} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </Provider>
 );

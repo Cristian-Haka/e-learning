@@ -2,37 +2,23 @@ require('dotenv').config();
 const Path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackVersionFilePlugin = require('webpack-version-file-plugin');
 
 module.exports = (options) => {
-  const ExtractSASS = new ExtractTextPlugin(`styles/${options.cssFileName}`);
-  const VENDOR_LIBS = [
-    'history',
-    'jquery',
-    'lodash',
-    'react',
-    'react-dom',
-    'react-ga',
-    'react-helmet',
-    'react-redux',
-    'react-router',
-    'react-router-redux',
-    'redux',
-    'redux-thunk'
-  ];
+  const ExtractSASS = new MiniCssExtractPlugin({ filename: `styles/${options.cssFileName}` });
 
   const webpackConfig = {
     devtool: options.devtool,
-    entry: {
-      app: Path.resolve(__dirname, '../src/app/index'),
-      vendor: VENDOR_LIBS
-    },
+    entry: Path.resolve(__dirname, '../src/app/index'),
     output: {
       path: Path.resolve(__dirname, '../dist'),
       publicPath: process.env.HOSTING_URL || '/',
       filename: '[name].js'
+    },
+    optimization: {
+      splitChunks: { chunks: 'all' }
     },
     resolve: {
       extensions: ['.js', '.jsx']
@@ -40,12 +26,6 @@ module.exports = (options) => {
     module: {
       rules: [
         {
-          test: /.jsx?$/,
-          use: 'eslint-loader',
-          enforce: 'pre',
-          include: Path.resolve(__dirname, '../src'),
-          exclude: /node_modules/
-        }, {
           test: /.jsx?$/,
           include: Path.resolve(__dirname, '../src/app'),
           use: 'babel-loader',
@@ -78,9 +58,6 @@ module.exports = (options) => {
           FIREBASE_DATABASE_URL: JSON.stringify(process.env.FIREBASE_DATABASE_URL),
           FIREBASE_STORAGE_BUCKET: JSON.stringify(process.env.FIREBASE_STORAGE_BUCKET)
         }
-      }),
-      new Webpack.optimize.CommonsChunkPlugin({
-        names: ['vendor', 'manifest']
       })
     ]
   };
@@ -102,7 +79,7 @@ module.exports = (options) => {
 
     webpackConfig.module.rules.push({
       test: /\.scss$/,
-      use: ExtractSASS.extract(['css-loader?importLoaders=1', 'postcss-loader?config=webpack/postcss.config.js', { loader: 'sass-loader', options: { implementation: require('sass') } }])
+      use: [MiniCssExtractPlugin.loader, 'css-loader?importLoaders=1', 'postcss-loader?config=webpack/postcss.config.js', { loader: 'sass-loader', options: { implementation: require('sass') } }]
     });
 
     webpackConfig.module.rules.push({
@@ -137,9 +114,8 @@ module.exports = (options) => {
     });
 
     webpackConfig.devServer = {
-      contentBase: Path.resolve(__dirname, '../'),
+      static: Path.resolve(__dirname, '../'),
       hot: true,
-      inline: true,
       historyApiFallback: true
     };
   }

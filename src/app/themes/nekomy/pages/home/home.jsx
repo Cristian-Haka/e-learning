@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { firebase, helpers } from 'redux-react-firebase';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { animateCss, showElem, renderCards } from '../../../../core/common/helpers';
 import { setLoading } from '../../../../core/actions/actions';
 import Icon from '../../../../core/common/lib/icon/icon';
