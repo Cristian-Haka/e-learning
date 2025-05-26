@@ -102,7 +102,7 @@ module.exports = (options) => {
 
     webpackConfig.module.rules.push({
       test: /\.scss$/,
-      use: ExtractSASS.extract(['css-loader?importLoaders=1', 'postcss-loader?config=webpack/postcss.config.js', 'sass-loader'])
+      use: ExtractSASS.extract(['css-loader?importLoaders=1', 'postcss-loader?config=webpack/postcss.config.js', { loader: 'sass-loader', options: { implementation: require('sass') } }])
     });
 
     webpackConfig.module.rules.push({
@@ -133,7 +133,7 @@ module.exports = (options) => {
 
     webpackConfig.module.rules.push({
       test: /\.scss$/,
-      use: ['style-loader', 'css-loader?importLoaders=1', 'postcss-loader?config=webpack/postcss.config.js', 'sass-loader']
+      use: ['style-loader', 'css-loader?importLoaders=1', 'postcss-loader?config=webpack/postcss.config.js', { loader: 'sass-loader', options: { implementation: require('sass') } }]
     });
 
     webpackConfig.devServer = {
