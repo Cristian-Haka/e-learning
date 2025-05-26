@@ -6,7 +6,7 @@ New project's website (under construction): [Realtime E-Learning](https://e-lear
 
 You need a Unix PC to clone this webapp!
 
-- Install Node.js >= 7.4.0 [https://nodejs.org/](https://nodejs.org/)
+- Install Node.js 18 or later from [https://nodejs.org/](https://nodejs.org/)
 
 - Install a Git client. I recommend SourceTree [https://www.sourcetreeapp.com/](https://www.sourcetreeapp.com/)
 

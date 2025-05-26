@@ -21,6 +21,9 @@
     "url": "git+https://github.com/nekomy/nekomy-platform"
   },
   "author": "Nekomy <hello@nekomy.com> (http://nekomy.com)",
+  "engines": {
+    "node": ">=18"
+  },
   "license": "GPL-2.0",
   "dependencies": {
     "axios": "^0.14.0",
